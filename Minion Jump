@@ -1,0 +1,28 @@
+import turtle as trtl 
+screen = trtl.Screen()
+#Images
+Background = "Gru_House.gif" 
+minion = "Dave+Run (1).gif"
+#Insert images 
+wn = trtl.Screen()
+wn.bgpic("Gru_House.gif")
+wn.setup(width=1.0, height=1.0)
+trtl.addshape("Dave+Run (1).gif")
+trtl.shape("Dave+Run (1).gif")
+#Put minion in correct spot
+trtl.penup()
+trtl.hideturtle()
+trtl.goto(-670,-299)
+trtl.showturtle()
+#Make the minion jump
+def minion_jump():
+    trtl.sety(trtl.ycor() + 300)
+#Make minion return
+    trtl.sety(trtl.ycor() - 300)
+#VECTOR
+
+
+screen.onkeypress(minion_jump, "space")
+wn = trtl.Screen()
+wn.listen()
+wn.mainloop()
