@@ -1,0 +1,83 @@
+import turtle as trtl 
+import time
+screen = trtl.Screen()
+screen.setup(width=1.0, height=1.0)
+speed = 0
+
+#Image names
+BACKGROUND_IMAGE = "Gru_House.gif" 
+MINION_IMAGE = "Dave+Run (1).gif"
+VECTOR_IMAGE = "Vector.gif"
+vector = trtl.Turtle()
+minion = trtl.Turtle()
+timer = trtl.Turtle()
+
+#Insert background 
+screen.bgpic(BACKGROUND_IMAGE)
+
+def set_up_turtle(t, image_name):
+    screen.addshape(image_name)
+    t.shape(image_name)
+    t.penup()
+    t.hideturtle()
+
+set_up_turtle(minion, MINION_IMAGE)
+set_up_turtle(vector, VECTOR_IMAGE)
+
+def place_turtle(t, x, y):
+    t.hideturtle()
+    t.goto (x, y)
+    t.showturtle()
+
+place_turtle(minion, -670, -300)
+place_turtle(vector, 700, -299)
+minion.speed(3) #minion jumps slower than usual
+
+# Setup timer
+timer.penup()
+timer.hideturtle()
+timer.goto(300,300)
+timer_value = 30
+
+def print_timer():
+  timer.clear()
+  if timer_value > 0:
+    timer.write("Time remaining " + str(timer_value) + " seconds", font=("Arial", 24))
+  else:
+    timer.write("Game Over.", font=("Arial", 24))
+    time.sleep(3)
+    screen.bye()
+
+def timer_tick():
+  global timer_value
+  timer_value -= 1
+  print_timer()
+  screen.ontimer(timer_tick, 1000)
+
+#User imput for vector's speed
+speed = screen.numinput("Minion Rush", "Please enter speed of Vector (Lower = Faster)", 5, 1, 10)
+speed = int(speed)
+
+#print the initial timer value and start the timer
+timer_tick()
+
+#Minion functions
+
+def minion_jump():
+    minion.sety(minion.ycor() + 250) #Make minion jump
+    minion.sety(minion.ycor() - 250) #Make minion return
+    
+def move_vector():
+    if vector.xcor() <= -800:
+        vector.speed(0) #vector jumps at the beginning with no animation
+        place_turtle(vector, 700, -299)
+        vector.speed(10) #vector animates again
+    vector.setx(vector.xcor() - 10)
+    screen.ontimer(move_vector, speed * 5)
+
+#register event responses
+screen.onkeypress(minion_jump, "space")
+screen.ontimer(move_vector, speed * 5)
+
+screen.listen()
+screen.mainloop() 
