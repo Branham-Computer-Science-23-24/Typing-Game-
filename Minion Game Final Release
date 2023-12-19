@@ -1,0 +1,64 @@
+import turtle as trtl 
+screen = trtl.Screen()
+screen.setup(width=1.0, height=1.0)
+speed = 0
+
+#Image names
+BACKGROUND_IMAGE = "Gru_House.gif" 
+MINION_IMAGE = "Dave+Run (1).gif"
+VECTOR_IMAGE = "Vector.gif"
+vector = trtl.Turtle()
+minion = trtl.Turtle()
+
+#Insert background 
+screen.bgpic(BACKGROUND_IMAGE)
+
+def set_up_turtle(t, image_name):
+    screen.addshape(image_name)
+    t.shape(image_name)
+    t.penup()
+    t.hideturtle()
+
+set_up_turtle(minion, MINION_IMAGE)
+set_up_turtle(vector, VECTOR_IMAGE)
+
+def place_turtle(t, x, y):
+    t.hideturtle()
+    t.goto (x, y)
+    t.showturtle()
+
+place_turtle(minion, -670, -300)
+place_turtle(vector, 700, -299)
+minion.speed(2) #Minion jumps slower than usual
+
+#User imput for vector's speed
+speed = screen.numinput("Minion Rush", "Please enter speed of Vector (Lower = Faster)", 5, 1, 10)
+speed = int(speed)
+print(speed)
+#Minion functions
+
+def minion_jump():
+    minion.sety(minion.ycor() + 250) #Make minion jump
+    minion.sety(minion.ycor() - 250) #Make minion return
+    
+def move_vector():
+    if vector.xcor() <= -800:
+        vector.speed(0) #Vector jumps at the beginning with no animation
+        place_turtle(vector, 700, -299)
+        vector.speed(10) #Vector animates again
+    vector.setx(vector.xcor() - 10)
+    screen.ontimer(move_vector, speed * 5)
+
+#Timer
+timer_write = trtl.Turtle()
+timer_write.penup()
+timer_write.goto(50,180)
+timer_write.hideturtle()
+
+
+#Register event responses
+screen.onkeypress(minion_jump, "space")
+screen.ontimer(move_vector, speed * 5)
+
+screen.listen()
+screen.mainloop()
